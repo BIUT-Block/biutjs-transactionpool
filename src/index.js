@@ -1,9 +1,9 @@
 const SECUtil = require('@sec-block/secjs-util')
 
-class TransactionPool {
+class SECTransactionPool {
   /**
    * create a transaction pool with config, such as transaction pool of token chain or transaction chain
-   * @param {*} config
+   * @param {Object} config
    *
    */
   constructor (config) {
@@ -19,7 +19,7 @@ class TransactionPool {
 
   /**
    * save the transaction into local transaction pool
-   * @param {*} transaction
+   * @param {Object} transaction
    */
   addTxIntoPool (transaction) {
     this.txBuffer.push(JSON.stringify(transaction))
@@ -28,7 +28,7 @@ class TransactionPool {
   /**
    * upate the block hash array
    * this blockChainHashBuffer is for checking the transaction in transaction pool, just compare the TxHash
-   * @param {*} blockChain
+   * @param {Object} blockChain
    */
   updateBlockHashArray (blockChain) {
     let timeStampOfLastBlock = blockChain.getLastBlockTimeStamp()
@@ -40,7 +40,7 @@ class TransactionPool {
         this.blockChainHashBuffer.updateTime = this.SECUtil.currentUnixTimeSecond()
       })
     } else {
-      /* 比较长度 */
+      /* compare length */
       if (this.blockChainHashBuffer.updateTime < timeStampOfLastBlock) {
         let partBlockChain = blockChain.filter((block) => {
           return block.TimeStamp >= timeStampOfLastBlock
@@ -70,7 +70,7 @@ class TransactionPool {
 
   /**
    * to update the local transaction pool with transactions from other peers
-   * @param {*} txFromOtherPeer
+   * @param {Object} txFromOtherPeer
    */
   addTxFromOtherPeerIntoPool (txFromOtherPeer) {
     txFromOtherPeer.foreach((tx) => {
@@ -84,7 +84,8 @@ class TransactionPool {
 
   /**
    * get transaction status: pending, success, error
-   * @param {*} transaction
+   * @param  {Object} transaction
+   * @return {Status}
    */
   getTxStatus (transaction) {
     return this.transaction.TxReceiptStatus
@@ -92,14 +93,18 @@ class TransactionPool {
 
   /**
    * return all transaction from pool
+   * @return {Array}
    */
   getAllTxFromPool () {
     return this.txBuffer
   }
 
+  /**
+   * clear the transaction pool
+   */
   clear () {
     this.txBuffer = []
   }
 }
 
-module.exports = TransactionPool
+module.exports = SECTransactionPool
