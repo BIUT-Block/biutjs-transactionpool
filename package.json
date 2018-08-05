@@ -1,0 +1,22 @@
+{
+  "name": "@sec-block/secjs-transactionpool",
+  "version": "1.0.0",
+  "description": "sec blockchain transaction-pool lib",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/MongoX-SEC/secjs-transactionpool.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/MongoX-SEC/secjs-transactionpool/issues"
+  },
+  "homepage": "https://gitlab.com/MongoX-SEC/secjs-transactionpool#README"
+}
