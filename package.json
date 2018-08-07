@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/MongoX-SEC/secjs-transactionpool.git"
+    "url": "https://github.com/SEC-Block/secjs-transactionpool.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/MongoX-SEC/secjs-transactionpool/issues"
+    "url": "https://github.com/SEC-Block/secjs-transactionpool/issues"
   },
-  "homepage": "https://gitlab.com/MongoX-SEC/secjs-transactionpool#README",
+  "homepage": "https://github.com/SEC-Block/secjs-transactionpool#README",
   "dependencies": {
     "@sec-block/secjs-util": "^1.1.12",
     "chai": "^4.1.2"
