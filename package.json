@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/SEC-Block/secjs-transactionpool#README",
   "dependencies": {
-    "@sec-block/secjs-util": "^1.1.12",
+    "@sec-block/secjs-util": "^1.1.15",
     "chai": "^4.1.2"
   }
 }
