@@ -22,7 +22,7 @@ class SECTransactionPool {
    * @param {Object} transaction
    */
   addTxIntoPool (transaction) {
-    this.txBuffer.push(JSON.stringify(transaction))
+    this.txBuffer.push(transaction)
   }
 
   /**
