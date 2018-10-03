@@ -92,6 +92,35 @@ class SECTransactionPool {
   }
 
   /**
+   * added by PPG
+   * using for getting transaction status for user
+   * @param {string} TxHash
+   */
+  getTxStatusByTxHash (TxHash) {
+    let buffer = {}
+    this.txBuffer.forEach((tx) => {
+      if (tx.TxHash === TxHash) {
+        buffer = tx
+      }
+    })
+    return buffer
+  }
+  /**
+   * added by PPG
+   * using for getting transaction status for user
+   * @param  {object} transaction
+   */
+  getTxStatusByTx (transaction) {
+    let buffer = {}
+    this.txBuffer.forEach((tx) => {
+      if (tx.TxHash === transaction.TxHash) {
+        buffer = tx
+      }
+    })
+    return buffer
+  }
+
+  /**
    * return all transaction from pool
    * @return {Array}
    */
