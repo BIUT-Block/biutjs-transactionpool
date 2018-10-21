@@ -35,6 +35,9 @@ class SECTransactionPool {
     let blockchain = BlockChain.getBlockChain()
     blockchain.forEach(block => {
       block.Transactions.forEach(transaction => {
+        if (typeof transaction === 'string') {
+          transaction = JSON.parse(transaction)
+        }
         let index = this.txHashArray.indexOf(transaction.TxHash);
         if (index > -1) {
           this.txHashArray.splice(index, 1);
@@ -51,6 +54,9 @@ class SECTransactionPool {
    */
   updateByBlock (block) {
     block.Transactions.forEach(transaction => {
+      if (typeof transaction === 'string') {
+        transaction = JSON.parse(transaction)
+      }
       let index = this.txHashArray.indexOf(transaction.TxHash);
       if (index > -1) {
         this.txHashArray.splice(index, 1);
