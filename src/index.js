@@ -1,5 +1,3 @@
-const SECUtil = require('@sec-block/secjs-util')
-
 class SECTransactionPool {
   /**
    * create a transaction pool with config, such as transaction pool of token chain or transaction chain
@@ -9,12 +7,12 @@ class SECTransactionPool {
   constructor (config) {
     this.config = config
     this.txBuffer = []
+    this.txHashArray = []
     this.blockChainHashBuffer = {
       blockHashes: [],
       firstTimeUpdate: true,
       updateTime: ''
     }
-    this.SECUtil = new SECUtil()
   }
 
   /**
@@ -22,73 +20,43 @@ class SECTransactionPool {
    * @param {Object} transaction
    */
   addTxIntoPool (transaction) {
-    this.txBuffer.push(transaction)
+    if (this.txHashArray.indexOf(transaction.TxHash) < 0) {
+      this.txBuffer.push(transaction)
+      this.txHashArray.push(transaction.TxHash)
+    }
   }
 
   /**
    * upate the block hash array
    * this blockChainHashBuffer is for checking the transaction in transaction pool, just compare the TxHash
-   * @param {Object} blockChain
+   * @param {Object} BlockChain
    */
-  updateBlockHashArray (blockChain) {
-    let timeStampOfLastBlock = blockChain.getLastBlockTimeStamp()
-
-    if (this.blockChainHashBuffer.firstTimeUpdate) {
-      blockChain.foreach((block) => {
-        this.blockChainHashBuffer.blockHashes.add(block.TxHash)
-        this.blockChainHashBuffer.firstTimeUpdate = false
-        this.blockChainHashBuffer.updateTime = this.SECUtil.currentUnixTimeSecond()
+  updateBlockChainHashArray (BlockChain) {
+    let blockchain = BlockChain.getBlockChain()
+    blockchain.forEach(block => {
+      block.Transactions.forEach(transaction => {
+        let index = this.txHashArray.indexOf(transaction.TxHash);
+        if (index > -1) {
+          this.txHashArray.splice(index, 1);
+          this.txBuffer.splice(index, 1);
+        }
       })
-    } else {
-      /* compare length */
-      if (this.blockChainHashBuffer.updateTime < timeStampOfLastBlock) {
-        let partBlockChain = blockChain.filter((block) => {
-          return block.TimeStamp >= timeStampOfLastBlock
-        })
-        this.blockChainHashBuffer.blockHashes.concat(partBlockChain.TxHash)
-        this.blockChainHashBuffer.updateTime = this.SECUtil.currentUnixTimeSecond()
-      } else {
-        // do nothing
+    })
+  }
+
+  /**
+   * upate the block hash array
+   * this blockChainHashBuffer is for checking the transaction in transaction pool, just compare the TxHash
+   * @param {Object} BlockChain
+   */
+  updateBlockHashArray (block) {
+    block.Transactions.forEach(transaction => {
+      let index = this.txHashArray.indexOf(transaction.TxHash);
+      if (index > -1) {
+        this.txHashArray.splice(index, 1);
+        this.txBuffer.splice(index, 1);
       }
-    }
-  }
-
-  /**
-   * remove transactions in transaction pool, if they are already upload to blockchain
-   */
-  compareTxWithHashTable () {
-    let tempBuffer = []
-    this.txBuffer.foreach((transaction) => {
-      this.blockChainHashBuffer.blockHashes.foreach((hash) => {
-        if (transaction.TxHash !== hash) {
-          tempBuffer.add(transaction.TxHash)
-        }
-      })
     })
-    this.txBuffer = tempBuffer
-  }
-
-  /**
-   * to update the local transaction pool with transactions from other peers
-   * @param {Object} txFromOtherPeer
-   */
-  addTxFromOtherPeerIntoPool (txFromOtherPeer) {
-    txFromOtherPeer.foreach((tx) => {
-      this.txBuffer.foreach((localTx) => {
-        if (tx.TxHash !== localTx.TxHash) {
-          this.txBuffer.add(tx)
-        }
-      })
-    })
-  }
-
-  /**
-   * get transaction status: pending, success, error
-   * @param  {Object} transaction
-   * @return {Status}
-   */
-  getTxStatus (transaction) {
-    return this.transaction.TxReceiptStatus
   }
 
   /**
@@ -105,6 +73,7 @@ class SECTransactionPool {
     })
     return buffer
   }
+
   /**
    * added by PPG
    * using for getting transaction status for user
@@ -129,10 +98,19 @@ class SECTransactionPool {
   }
 
   /**
+   * return all transaction from pool
+   * @return {Array}
+   */
+  getTxHashArrayFromPool () {
+    return this.txHashArray
+  }
+
+  /**
    * clear the transaction pool
    */
   clear () {
     this.txBuffer = []
+    this.txHashArray = []
   }
 }
 
