@@ -27,11 +27,11 @@ class SECTransactionPool {
   }
 
   /**
-   * upate the block hash array
+   * update the pool by blockchain
    * this blockChainHashBuffer is for checking the transaction in transaction pool, just compare the TxHash
    * @param {Object} BlockChain
    */
-  updateBlockChainHashArray (BlockChain) {
+  updateByBlockChain (BlockChain) {
     let blockchain = BlockChain.getBlockChain()
     blockchain.forEach(block => {
       block.Transactions.forEach(transaction => {
@@ -45,11 +45,11 @@ class SECTransactionPool {
   }
 
   /**
-   * upate the block hash array
+   * update the pool by block
    * this blockChainHashBuffer is for checking the transaction in transaction pool, just compare the TxHash
    * @param {Object} BlockChain
    */
-  updateBlockHashArray (block) {
+  updateByBlock (block) {
     block.Transactions.forEach(transaction => {
       let index = this.txHashArray.indexOf(transaction.TxHash);
       if (index > -1) {
