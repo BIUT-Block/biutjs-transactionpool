@@ -19,7 +19,8 @@ class SECTransactionPool {
    * save the transaction into local transaction pool
    * @param {Object} transaction
    */
-  addTxIntoPool (transaction) {
+  addTxIntoPool (_transaction) {
+    let transaction = Object.assign({}, _transaction)
     if (this.txHashArray.indexOf(transaction.TxHash) < 0) {
       this.txBuffer.push(transaction)
       this.txHashArray.push(transaction.TxHash)
