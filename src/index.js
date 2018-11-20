@@ -21,6 +21,9 @@ class SECTransactionPool {
    */
   addTxIntoPool (_transaction) {
     let transaction = Object.assign({}, _transaction)
+    if (!('TxHash' in transaction)) {
+      return
+    }
     if (this.txHashArray.indexOf(transaction.TxHash) < 0) {
       this.txBuffer.push(transaction)
       this.txHashArray.push(transaction.TxHash)
